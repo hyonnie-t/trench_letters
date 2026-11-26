@@ -131,6 +131,9 @@ function startApp() {
   if (window.DraftGuard) DraftGuard.start({ key: CONFIG.GAME_NAME, sid: sid });
   loadPadletUrl(p.grade, p.ban).then(u => { S.padletUrl = u; renderPadlet(); });
   loadPick();
+  let done = false;
+  try { done = !S.preview && localStorage.getItem(storeKey() + ":done") === "1"; } catch (e) { /* 무시 */ }
+  $("s1Err").textContent = done ? "이 학번은 이 기기에서 이미 제출했어. 다시 내야 하면 선생님께 먼저 물어봐." : "";
   renderEnvelopes();
   show("s1");
 }
@@ -164,9 +167,11 @@ function openEnvelope(id, btn) {
     clearWriting();
   }
   $("s1Err").textContent = "";
+  const same = S.chosen === id && $("s2Body").childElementCount > 0; // 같은 편지면 지운 먹줄을 그대로 둔다
+  if (S.chosen !== id) S.checks = [false, false];
   S.chosen = id; savePick();
   btn.classList.add("opening");
-  setTimeout(() => { btn.classList.remove("opening"); btn.dataset.confirm = ""; renderLetter(); show("s2"); }, 850);
+  setTimeout(() => { btn.classList.remove("opening"); btn.dataset.confirm = ""; if (!same) renderLetter(); show("s2"); }, 850);
 }
 
 function hasWriting() {
@@ -230,6 +235,8 @@ function censorEl(text) {
     fade();
     if (rub >= CONFIG.RUB_NEED) reveal();
   });
+  /* 아이폰: 글 속 inline 요소엔 touch-action이 안 먹어서, 먹줄 위에서 손가락이 움직이면 화면 스크롤을 직접 막는다 */
+  s.addEventListener("touchmove", e => { if (!s.classList.contains("done")) e.preventDefault(); }, { passive: false });
   const stop = () => { last = null; };
   s.addEventListener("pointerup", stop);
   s.addEventListener("pointercancel", stop);
@@ -357,10 +364,17 @@ async function submitAll() {
     return;
   }
   S.sending = false; S.submitted = true;
+  lockAfterSubmit();
   if (window.DraftGuard) DraftGuard.clear();
   $("submitBtn").textContent = "제출 완료";
   $("outMsg").textContent = S.preview ? "미리보기라 저장하지 않았어." : "제출했어! 이제 글 복사를 눌러 패들렛에 올려 줘.";
 }
+/* 제출 뒤에는 글칸을 잠가 시트 제출본과 패들렛 복사본이 같게 한다. 학번별로 «제출함»을 기억한다. */
+function lockAfterSubmit() {
+  SUMS.map(s => s.id).concat("letterOut").forEach(id => { $(id).readOnly = true; $(id).setAttribute("data-no-draft", ""); });
+  if (!S.preview) { try { localStorage.setItem(storeKey() + ":done", "1"); } catch (e) { /* 무시 */ } }
+}
+
 async function copyOut() {
   const text = buildOutText();
   try { await navigator.clipboard.writeText(text); }
@@ -382,7 +396,7 @@ function goSum() {
 function goWrite() {
   const err = checkSums();
   if (err) { $("s3Err").textContent = err; return; }
-  $("s4Who").textContent = letter().who;
+  $("s4Who").textContent = letter().writer;
   renderChecks();
   show("s4");
 }
