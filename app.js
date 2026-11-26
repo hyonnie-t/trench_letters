@@ -10,7 +10,7 @@ const CONFIG = {
 const S = {
   sid: "", name: "", grade: 0, ban: 0, preview: false,
   chosen: "", checks: [false, false],
-  sending: false, submitted: false, padletUrl: ""
+  sending: false, submitted: false, again: false, padletUrl: ""
 };
 
 const SCREENS = { s0: "", s1: "pick", s2: "read", s3: "sum", s4: "write", s5: "wrap" };
@@ -133,7 +133,7 @@ function startApp() {
   loadPick();
   let done = false;
   try { done = !S.preview && localStorage.getItem(storeKey() + ":done") === "1"; } catch (e) { /* 무시 */ }
-  $("s1Err").textContent = done ? "이 학번은 이 기기에서 이미 제출했어. 다시 내야 하면 선생님께 먼저 물어봐." : "";
+  $("s1Err").textContent = done ? "이 학번은 이 기기에서 이미 제출했어. 고쳐서 다시 내려면 편지를 열어 고친 뒤 «다시 제출»을 눌러 줘. 새로 낸 글이 앞의 것을 대신해." : "";
   renderEnvelopes();
   show("s1");
 }
@@ -157,7 +157,7 @@ function renderEnvelopes() {
 }
 
 function openEnvelope(id, btn) {
-  if (S.submitted && S.chosen && S.chosen !== id) { $("s1Err").textContent = "이미 제출했어. 다른 편지로 바꿀 수 없어."; return; }
+  if (S.submitted && S.chosen && S.chosen !== id) { $("s1Err").textContent = "이미 제출했어. 다른 편지로 바꾸려면 끝 화면의 «고쳐서 다시 내기»를 먼저 눌러 줘."; return; }
   if (S.chosen && S.chosen !== id && hasWriting()) {
     $("s1Err").textContent = "다른 편지로 바꾸면 쓰던 정리와 편지가 지워져. 바꾸려면 한 번 더 눌러.";
     if (btn.dataset.confirm !== "1") {
@@ -328,7 +328,8 @@ function renderFinal() {
   box.appendChild(el("h3", "", "1919년, 보내지 못한 편지"));
   box.appendChild(el("p", "hand", $("letterOut").value.trim()));
   $("submitBtn").disabled = S.submitted;
-  $("submitBtn").textContent = S.submitted ? "제출 완료" : "제출";
+  $("submitBtn").textContent = S.submitted ? "제출 완료" : (S.again ? "다시 제출" : "제출");
+  $("fixBtn").hidden = !S.submitted;
   renderPadlet();
 }
 function renderPadlet() {
@@ -360,19 +361,34 @@ async function submitAll() {
     await postToSheet(payload);
   } catch (e) {
     $("s5Err").textContent = e.locked ? e.message : "저장이 안 됐어. 인터넷을 확인하고 다시 눌러 줘.";
-    S.sending = false; $("submitBtn").disabled = false; $("submitBtn").textContent = "제출";
+    S.sending = false; $("submitBtn").disabled = false; $("submitBtn").textContent = S.again ? "다시 제출" : "제출";
     return;
   }
   S.sending = false; S.submitted = true;
   lockAfterSubmit();
   if (window.DraftGuard) DraftGuard.clear();
   $("submitBtn").textContent = "제출 완료";
+  $("fixBtn").hidden = false;
   $("outMsg").textContent = S.preview ? "미리보기라 저장하지 않았어." : "제출했어! 이제 글 복사를 눌러 패들렛에 올려 줘.";
 }
 /* 제출 뒤에는 글칸을 잠가 시트 제출본과 패들렛 복사본이 같게 한다. 학번별로 «제출함»을 기억한다. */
 function lockAfterSubmit() {
   SUMS.map(s => s.id).concat("letterOut").forEach(id => { $(id).readOnly = true; $(id).setAttribute("data-no-draft", ""); });
   if (!S.preview) { try { localStorage.setItem(storeKey() + ":done", "1"); } catch (e) { /* 무시 */ } }
+}
+
+/* 2026-11-26 고쳐서 다시 내기(효니 쪽지: 낸 학생이 다시 낼 길이 없었다). 글칸 잠금·기기의 «제출함» 표시·편지 바꾸기 막음을 풀고
+ * 쓴 글은 화면에 그대로 둔다. 다시 제출하면 백엔드가 새 행을 최신 기록으로 본다. */
+function unlockForFix() {
+  if (S.sending || !S.submitted) return;
+  S.submitted = false; S.again = true;
+  SUMS.map(s => s.id).concat("letterOut").forEach(id => { $(id).readOnly = false; $(id).removeAttribute("data-no-draft"); });
+  if (!S.preview) { try { localStorage.removeItem(storeKey() + ":done"); } catch (e) { /* 무시 */ } }
+  $("fixBtn").hidden = true;
+  $("submitBtn").disabled = false;
+  $("submitBtn").textContent = "다시 제출";
+  $("s1Err").textContent = "";
+  $("outMsg").textContent = "이전으로 돌아가 고친 뒤 «다시 제출»을 눌러 줘. 새로 낸 글이 앞의 것을 대신해.";
 }
 
 async function copyOut() {
@@ -435,6 +451,7 @@ function init() {
   $("s4Next").addEventListener("click", goWrap);
   $("s5Back").addEventListener("click", () => { renderChecks(); show("s4"); });
   $("submitBtn").addEventListener("click", submitAll);
+  $("fixBtn").addEventListener("click", unlockForFix);
   $("copyBtn").addEventListener("click", copyOut);
 }
 
