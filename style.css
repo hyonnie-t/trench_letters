@@ -1,0 +1,146 @@
+/* 색: 1914~1918 참호의 밤 → 짙은 쑥색·진흙 회색 바탕 위에 크림색 편지지가 떠 있다.
+   포인트는 추모의 상징 양귀비 빨강, 보조는 군복 카키. 검열 먹줄은 진짜 먹색.
+   편지는 손글씨 Nanum Pen Script, 제목은 Gowun Batang, 읽는 글은 Noto Sans KR. */
+:root{
+  --space-1:4px;--space-2:8px;--space-3:16px;--space-4:24px;--space-5:32px;--space-6:48px;--space-7:64px;
+  --night:#2b332e;--night-2:#36403a;--mud:#4a4f45;
+  --paper:#f7f1e1;--paper-line:#e4d9bd;--ink:#2a2723;--muted:#6b665c;
+  --khaki:#8b8a5c;--khaki-wash:#ecebd9;
+  --poppy:#c23b2b;--poppy-deep:#9e2c1f;--poppy-wash:#f8e3de;
+  --censor:#141414;
+  --hand:"Nanum Pen Script","Gowun Batang",cursive;--serif:"Gowun Batang","Noto Serif KR",serif
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{font-size:17px}
+body{margin:0;background:var(--night);color:var(--ink);font-family:"Noto Sans KR","Apple SD Gothic Neo",sans-serif;line-height:1.7}
+.page{max-width:760px;margin:0 auto;padding:var(--space-3) var(--space-3) var(--space-7)}
+.preview-bar{background:var(--poppy);color:#fff;text-align:center;padding:var(--space-2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* 머리 */
+.head{padding:var(--space-3) 0 var(--space-2);color:var(--paper)}
+.eyebrow{display:inline-block;border:1px solid var(--khaki);color:#d9d6b4;font-size:14px;padding:0 var(--space-3);border-radius:999px}
+h1{font:700 2rem/1.3 var(--serif);margin:var(--space-2) 0 var(--space-3);color:var(--paper)}
+h2{font:700 1.3rem/1.4 var(--serif);margin:0 0 var(--space-2)}
+.steps{list-style:none;display:flex;gap:var(--space-1);margin:0 0 var(--space-3);padding:0}
+.steps li{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--space-1);min-height:40px;padding:0 var(--space-1);border-radius:999px;background:var(--night-2);color:#a9ab9a;font-size:14px;text-align:center;line-height:1.2}
+.steps li span{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--mud);color:#ddd;font-size:13px;flex:none}
+.steps li.on{background:var(--poppy);color:#fff}
+.steps li.on span{background:#fff;color:var(--poppy)}
+.steps li.done{background:var(--khaki);color:#fff}
+.steps li.done span{background:#fff;color:var(--khaki)}
+
+/* 종이 카드 */
+.card{background:var(--paper);border-radius:16px;padding:var(--space-4);margin-bottom:var(--space-3);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.note{color:var(--muted);margin:0 0 var(--space-3)}
+label{display:block;margin:var(--space-3) 0 var(--space-1);font-weight:700}
+input,textarea{width:100%;font:inherit;font-size:17px;padding:var(--space-2) var(--space-3);min-height:48px;border:2px solid var(--paper-line);border-radius:12px;background:#fff;color:var(--ink)}
+textarea{resize:vertical}
+input:focus,textarea:focus,button:focus-visible,summary:focus-visible{outline:3px solid #e9a99f;outline-offset:1px;border-color:var(--poppy)}
+.err{color:#ffb4a8;min-height:0;margin:var(--space-2) 0 0;font-weight:700}
+.card .err{color:var(--poppy-deep)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 var(--space-4);border:0;border-radius:12px;background:var(--poppy);color:#fff;font:700 17px "Noto Sans KR",sans-serif;cursor:pointer;text-decoration:none;transition:transform .12s ease,background .2s ease}
+.btn:active{transform:scale(.97)}
+.btn:hover{background:var(--poppy-deep)}
+.btn.ghost{background:transparent;color:var(--poppy-deep);border:2px solid var(--poppy)}
+.btn.ghost:hover{background:var(--poppy-wash)}
+.nav .btn.ghost{color:var(--paper);border-color:#8f9486}
+.nav .btn.ghost:hover{background:var(--night-2)}
+.btn[disabled]{opacity:.55;cursor:default;transform:none}
+.btn.wide{width:100%;margin-top:var(--space-4)}
+.btn-row{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.btn-row.nav{justify-content:space-between;margin-top:var(--space-3)}
+
+/* 표지 */
+.cover{margin:0 0 var(--space-3);position:relative;border-radius:16px;overflow:hidden}
+.cover img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+figcaption{position:absolute;right:var(--space-2);bottom:var(--space-2);background:rgba(0,0,0,.55);color:#eee;font-size:12px;padding:0 var(--space-2);border-radius:999px}
+
+/* 1. 봉투 */
+.env-list{display:grid;grid-template-columns:1fr;gap:var(--space-3)}
+.env{position:relative;display:block;width:100%;min-height:112px;padding:var(--space-3) var(--space-4) var(--space-3) 120px;border:0;border-radius:8px;background:#efe4c8;text-align:left;cursor:pointer;font:inherit;color:var(--ink);box-shadow:0 4px 0 #cdbf9c;transition:transform .15s ease,box-shadow .15s ease;overflow:hidden}
+.env:hover{transform:translateY(-2px);box-shadow:0 6px 0 #cdbf9c}
+.env::before{content:"";position:absolute;left:0;top:0;right:0;height:56px;background:linear-gradient(to bottom right,transparent 49.5%,#e2d5b2 50%) left/50% 100% no-repeat,linear-gradient(to bottom left,transparent 49.5%,#e2d5b2 50%) right/50% 100% no-repeat;transform-origin:top;transition:transform .45s ease}
+.env-thumb{position:absolute;left:var(--space-3);top:50%;transform:translateY(-50%) rotate(-3deg);width:88px;height:66px;object-fit:cover;border:4px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.env-stamp{position:absolute;right:var(--space-3);top:var(--space-3);width:40px;height:48px;border:2px dashed var(--poppy);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--poppy);font-size:20px}
+.env-who{position:relative;display:block;font:700 1.15rem/1.4 var(--serif);padding-right:var(--space-6)}
+.env-from{position:relative;display:block;color:var(--muted);font-size:15px}
+.env.opening::before{transform:scaleY(-1)}
+.env.opening{animation:envOut .6s ease .3s forwards}
+@keyframes envOut{to{transform:translateY(-8px);opacity:.3}}
+
+/* 2. 읽기 */
+.read-grid{display:grid;grid-template-columns:1fr;gap:var(--space-3)}
+.pic{margin:0;position:relative;border-radius:12px;overflow:hidden;align-self:start}
+.pic img{display:block;width:100%;height:auto}
+.letter{background:var(--paper);background-image:repeating-linear-gradient(transparent 0 35px,var(--paper-line) 35px 36px);border-radius:4px;padding:var(--space-4);box-shadow:0 8px 24px rgba(0,0,0,.3);animation:letterIn .5s ease both;transform:rotate(-.6deg)}
+@keyframes letterIn{from{opacity:0;transform:translateY(24px) rotate(-.6deg)}to{opacity:1;transform:translateY(0) rotate(-.6deg)}}
+.letter-meta{margin:0 0 var(--space-2);color:var(--muted);font-size:14px}
+.letter-body p{font:1.45rem/36px var(--hand);margin:0 0 var(--space-2);color:#26323f}
+/* 먹줄: 글자 자체에 검은 바탕을 깔아 줄이 바뀌어도 줄마다 가려진다(box-decoration-break). --a는 남은 먹의 진하기 */
+.censor{--a:1;cursor:grab;touch-action:none;border-radius:2px;padding:0 2px;
+  background:rgba(20,20,20,var(--a));color:rgba(38,50,63,calc(1 - var(--a)));
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .3s ease,color .3s ease;user-select:none;-webkit-user-select:none}
+.censor.done{--a:0;background:#f3d9a3;color:#7a2418;cursor:default}
+.censor-note{color:#f3e9cf;text-align:center;margin:var(--space-3) 0 var(--space-2)}
+.memo{background:var(--paper);border-radius:12px;padding:var(--space-3) var(--space-4);margin-top:var(--space-3)}
+.memo summary{font-weight:700;cursor:pointer;min-height:32px}
+.memo ul{margin:var(--space-2) 0;padding-left:var(--space-4)}
+.memo li{margin-bottom:var(--space-2)}
+.memo p{margin:var(--space-2) 0}
+.pg{color:var(--muted);font-size:14px}
+.fine{color:#a9ab9a;font-size:13px;margin:var(--space-2) 0 0}
+
+/* 3. 정리 */
+.recap{margin-bottom:var(--space-2)}
+.tag{display:inline-block;background:var(--khaki);color:#fff;padding:var(--space-1) var(--space-3);border-radius:999px;font-weight:700}
+.sum{margin-bottom:var(--space-4)}
+.sum:last-child{margin-bottom:0}
+.sum label{margin-top:0;font:700 1.1rem var(--serif)}
+.sum .guide{color:var(--muted);margin:0 0 var(--space-2);font-size:15px}
+.count{text-align:right;color:var(--muted);font-size:14px;margin-top:var(--space-1)}
+
+/* 4. 편지 쓰기 */
+.check{background:var(--khaki-wash);border-radius:12px;padding:var(--space-3);margin-bottom:var(--space-3)}
+.check-head{margin:0 0 var(--space-2);font-weight:700}
+.check ul{list-style:none;margin:0;padding:0}
+.check li{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2)}
+.ck{width:24px;height:24px;border:2px solid var(--khaki);border-radius:6px;background:#fff;flex:none;display:inline-flex;align-items:center;justify-content:center;transition:background .2s ease}
+.ck.on{background:var(--khaki);color:#fff}
+.ck.on::after{content:"✔";font-size:14px}
+.ck.manual{cursor:pointer}
+.chips{display:inline-flex;flex-wrap:wrap;gap:var(--space-1)}
+.chip{font-size:13px;padding:0 var(--space-2);border-radius:999px;background:#fff;border:1px solid var(--paper-line);color:var(--muted)}
+.chip.on{background:var(--khaki);border-color:var(--khaki);color:#fff}
+textarea.paper{font:1.4rem/36px var(--hand);background:#fffdf6;background-image:repeating-linear-gradient(transparent 0 35px,var(--paper-line) 35px 36px);background-attachment:local;padding:var(--space-2) var(--space-3);line-height:36px;margin-top:var(--space-3)}
+
+/* 5. 제출 */
+.final{background:#fffdf6;border:1px solid var(--paper-line);border-radius:8px;padding:var(--space-3);margin-bottom:var(--space-3);white-space:pre-wrap}
+.final h3{font:700 1rem var(--serif);margin:var(--space-3) 0 var(--space-1)}
+.final h3:first-child{margin-top:0}
+.final p{margin:0}
+.final .hand{font:1.35rem/1.6 var(--hand)}
+.padlet-box{border-top:1px dashed var(--paper-line);margin-top:var(--space-4);padding-top:var(--space-3)}
+.padlet-guide{margin:0 0 var(--space-2)}
+
+/* 폰: 단계 막대는 번호만(지금 단계만 이름), 그림은 낮게 잘라 편지가 빨리 보이게 */
+@media (max-width:767px){
+  .steps li{font-size:0;gap:0}
+  .steps li.on{font-size:14px;gap:var(--space-1);flex:2.4}
+  .pic img{height:200px;object-fit:cover}
+  .letter{padding:var(--space-3)}
+  .env{padding-left:112px}
+}
+/* 태블릿·PC: 읽기 화면은 그림·편지 2단, 봉투는 2열 */
+@media (min-width:768px){
+  .page{max-width:1100px;padding:var(--space-4) var(--space-5) var(--space-7)}
+  .env-list{grid-template-columns:1fr 1fr}
+  .read-grid{grid-template-columns:2fr 3fr;gap:var(--space-4)}
+  .pic{position:sticky;top:var(--space-3)}
+  #s0 .card,#s3,#s4,#s5{max-width:760px;margin-left:auto;margin-right:auto}
+  #s0 .cover{max-width:760px;margin-left:auto;margin-right:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
