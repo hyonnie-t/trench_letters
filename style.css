@@ -1,6 +1,6 @@
 /* 색: 1914~1918 참호의 밤 → 짙은 쑥색·진흙 회색 바탕 위에 크림색 편지지가 떠 있다.
    포인트는 추모의 상징 양귀비 빨강, 보조는 군복 카키. 검열 먹줄은 진짜 먹색.
-   편지는 손글씨 Nanum Pen Script, 제목은 Gowun Batang, 읽는 글은 Noto Sans KR. */
+   편지·제목은 옛 편지 느낌의 Gowun Batang(손글씨체는 읽기 어려워 2026-11-26 바꿈), 읽는 글은 Noto Sans KR. */
 :root{
   --space-1:4px;--space-2:8px;--space-3:16px;--space-4:24px;--space-5:32px;--space-6:48px;--space-7:64px;
   --night:#2b332e;--night-2:#36403a;--mud:#4a4f45;
@@ -8,7 +8,7 @@
   --khaki:#8b8a5c;--khaki-wash:#ecebd9;
   --poppy:#c23b2b;--poppy-deep:#9e2c1f;--poppy-wash:#f8e3de;
   --censor:#141414;
-  --hand:"Nanum Pen Script","Gowun Batang",cursive;--serif:"Gowun Batang","Noto Serif KR",serif
+  --hand:"Gowun Batang","Noto Serif KR",serif;--serif:"Gowun Batang","Noto Serif KR",serif
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -77,7 +77,7 @@ figcaption{position:absolute;right:var(--space-2);bottom:var(--space-2);backgrou
 .letter{background:var(--paper);background-image:repeating-linear-gradient(transparent 0 35px,var(--paper-line) 35px 36px);border-radius:4px;padding:var(--space-4);box-shadow:0 8px 24px rgba(0,0,0,.3);animation:letterIn .5s ease both;transform:rotate(-.6deg)}
 @keyframes letterIn{from{opacity:0;transform:translateY(24px) rotate(-.6deg)}to{opacity:1;transform:translateY(0) rotate(-.6deg)}}
 .letter-meta{margin:0 0 var(--space-2);color:var(--muted);font-size:14px}
-.letter-body p{font:1.45rem/36px var(--hand);margin:0 0 var(--space-2);color:#26323f}
+.letter-body p{font:1.1rem/36px var(--hand);margin:0 0 var(--space-2);color:#26323f}
 /* 먹줄: 글자 자체에 검은 바탕을 깔아 줄이 바뀌어도 줄마다 가려진다(box-decoration-break). --a는 남은 먹의 진하기 */
 .censor{--a:1;cursor:grab;touch-action:none;border-radius:2px;padding:0 2px;
   background:rgba(20,20,20,var(--a));color:rgba(38,50,63,calc(1 - var(--a)));
@@ -113,14 +113,14 @@ figcaption{position:absolute;right:var(--space-2);bottom:var(--space-2);backgrou
 .chips{display:inline-flex;flex-wrap:wrap;gap:var(--space-1)}
 .chip{font-size:13px;padding:0 var(--space-2);border-radius:999px;background:#fff;border:1px solid var(--paper-line);color:var(--muted)}
 .chip.on{background:var(--khaki);border-color:var(--khaki);color:#fff}
-textarea.paper{font:1.4rem/36px var(--hand);background:#fffdf6;background-image:repeating-linear-gradient(transparent 0 35px,var(--paper-line) 35px 36px);background-attachment:local;padding:var(--space-2) var(--space-3);line-height:36px;margin-top:var(--space-3)}
+textarea.paper{font:1.05rem/36px var(--hand);background:#fffdf6;background-image:repeating-linear-gradient(transparent 0 35px,var(--paper-line) 35px 36px);background-attachment:local;padding:var(--space-2) var(--space-3);line-height:36px;margin-top:var(--space-3)}
 
 /* 5. 제출 */
 .final{background:#fffdf6;border:1px solid var(--paper-line);border-radius:8px;padding:var(--space-3);margin-bottom:var(--space-3);white-space:pre-wrap}
 .final h3{font:700 1rem var(--serif);margin:var(--space-3) 0 var(--space-1)}
 .final h3:first-child{margin-top:0}
 .final p{margin:0}
-.final .hand{font:1.35rem/1.6 var(--hand)}
+.final .hand{font:1.05rem/1.8 var(--hand)}
 .padlet-box{border-top:1px dashed var(--paper-line);margin-top:var(--space-4);padding-top:var(--space-3)}
 .padlet-guide{margin:0 0 var(--space-2)}
 
